@@ -1,0 +1,145 @@
+a{
+    text-decoration: none !important;
+}
+
+a:hover{
+    color: #23527c!important;
+}
+
+.navbar-default{
+    margin:20px 0px 10px;
+    border:0;
+}
+
+
+.navbar-li,.navbar-brand{
+    font-size: 25px;
+    margin-left: 30px;
+}
+
+.jumbotron{
+    background: url("../images/tian.jpg") no-repeat;
+    /* transform: translate3d(0px, 0px, 0px); */
+    background-size: cover;
+    /* background-color:#9785CF; */
+    height: 400px;
+    width: 100%
+}
+
+.jumbotron .container{
+    margin-top: 86px;
+}
+
+.jumbotron h1{
+    text-align: center;
+    /* color: bisque; */
+    color: #240C0C;
+    font-size: 50px;
+}
+
+.jumbotron p{
+    text-align: center;
+    color: #240C0C;
+    font-size: 25px;
+}
+
+.article-format{
+    /*box-shadow: rgb(247, 239, 239) 5px 5px 20px;*/
+    box-shadow: rgb(50, 50, 50) 5px 5px 20px;
+    background-color: #D4CACA;
+    padding: 20px 40px;
+    margin-bottom: 40px;
+}
+
+.article-format:hover{
+    /*box-shadow: rgb(50, 50, 50) 5px 5px 20px;*/
+    box-shadow: rgb(130, 135, 131) 5px 5px 20px;
+}
+
+.cate-format{
+    /*box-shadow: rgb(247, 239, 239) 5px 5px 20px;*/
+    box-shadow: rgb(50, 50, 50) 5px 5px 20px;
+    background-color: #D4CACA;
+    border: 1px solid #DAD4D4;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.the-font {
+    font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+
+}
+
+.category{
+    /* text-align: center; */
+    color: #34495E;
+    padding-left: 30px;
+}
+
+.cate-li{
+    font-size: 20px;
+    list-style: none;
+}
+
+
+.Page{
+    margin: 20px auto;
+    text-align: center;
+}
+
+.footer{
+    background-color: #9785CF;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+}
+
+.footer a{
+    color: white;
+}
+
+
+hr{
+    border: 1px solid #dedede;
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.box{
+    font-size: 10px;
+    color: white;
+    margin-bottom: 10px;
+    text-align: right;
+    margin-right: 76px;
+}
+
+blockquote{
+    background-color: #f0f7fd;
+    border-left:5px solid #CE4844;
+}
+
+.back{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background: #0b0b08;
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    line-height: 35px;
+    position: fixed;
+    right: 60px;
+    bottom: 60px;
+    cursor: pointer;
+    display: none;
+    outline: none;
+    border: 0;
+    z-index: 10;
+    opacity: 0.8;
+}
+
+.tags span{
+    top: 4px!important;
+
+}

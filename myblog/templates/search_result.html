@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+    {% load calculate %}
+    {% block content %}
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% for blog in page %}
+                <article class="article-format the-font">
+                    <a href="/blog/{{ blog.id }}"><h3 style="color:#34495E">{{ blog.title }}</h3></a>
+                    <p><small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span style="color:#8C8C8C;">{{ blog.created }}</span></small></p>
+                    <p>{{ blog.content|truncatewords:20|safe }}</p>
+                    <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
+                        <p class="tags">
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
+                            {% for tag in blog.tags.all %}
+                            <a href="/tags/{{ tag.id }}"><span class="label label-default text-left"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>{{ tag.name }}</span></a>
+                            {% endfor %}
+                            <a href="/blog/{{ blog.id }}" style="float:right"><button class="btn  btn-primary btn-wide text-right"><span class="glyphicon glyphicon-fireglyphicon " aria-hidden="true"></span>  了解更多</button></a>
+                        </p>
+                    </div>
+                </article>
+                {% endfor %}
+                <nav aria-label="Page navigation" class="Page">
+                    <ul class="pagination">
+                        {% if page.has_previous %}
+                        <li>
+                            <a href="/{{ kind }}/{{ page.number|subtract }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="disabled">
+                                    <span>
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </span>
+                        </li>
+                        {% endif %}
+                        {% for index in page.paginator.page_range %}
+                        {% if page.number == index %}
+                        <li class="active">
+                            <span>{{ index }}<span class="sr-only">(current)</span></span>
+                        </li>
+                        {% else %}
+                        <li><a href="/{{ kind }}/{{ index }}">{{ index }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page.has_next %}
+                        <li>
+                            <a href="/{{ kind }}/{{ page.number|plus }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;</span>
+                                </span>
+                        </li>
+                        {% endif %}}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
