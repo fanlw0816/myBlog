@@ -12,17 +12,27 @@
 		<div class="row">
 			<div class="col-md-12">
 				<article class="article-format the-font">
-					<h3 style="color:#34495E">{{ blog.title }}</h3>
-						<p><small><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span style="color:#8C8C8C;">{{ blog.created }}</span></small></p>
-						<div>本博客采用创作共用版权协议, 要求署名、非商业用途和保持一致. 转载本博客文章必须也遵循署名-非商业用途-保持一致的创作共用协议</div>
-                        <p>{{ blog.content|safe }}</p>
+					<h3 style="color:#8c3e2a">{{ blog.title }}</h3>
+                        <p>
+                            <small>
+                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                <span>{{ blog.created }}</span>
+                                <span> | </span>
+                                <span> 阅读量: {{ blog.click }} </span>
+                                <span> | </span>
+                                <span> 分类： <a href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
+                            </small>
+                        </p>
+                        <div class="blog-content">
+                        {{ blog.content|safe }}
+                        </div>
 						<div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
 							<p class="tags">
 								<span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
 								{% for tag in blog.tags.all %}
-                                	<a href="/tags/{{ tag.id }}"><span class="label label-default text-left"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>{{ tag.name }}</span></a>
+                                	<a href="/tags/{{ tag.id }}/"><span class="label label-default text-left">{{ tag.name }}</span></a>
                             	{% endfor %}
-								<a href="/" style="float:right"><button class="btn  btn-primary btn-wide text-right"><span class="glyphicon glyphicon-fireglyphicon " aria-hidden="true"></span>  返回主页</button></a>
+								<a href="/" style="float:right"><button class="btn  btn-info">  返回主页</button></a>
 							</p>
 						</div>
                     </article>

@@ -23,9 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd6m3ugwvj)jnx&5-vd2t0xpj=)j@p0k#x%*4cj(=cx65z=n^fo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -128,6 +129,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # upload folder
 MEDIA_URL = '/media/'
