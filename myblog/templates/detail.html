@@ -12,19 +12,39 @@
 		<div class="row">
 			<div class="col-md-12">
 				<article class="article-format the-font">
-					<h3 style="color:#8c3e2a">{{ blog.title }}</h3>
+					<h3 style="color:#8c3e2a;font-size: 36px;">{{ blog.title }}</h3>
                         <p>
                             <small>
                                 <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                 <span>{{ blog.created }}</span>
                                 <span> | </span>
-                                <span> 阅读量: {{ blog.click }} </span>
+                                <span> 阅读量:({{ blog.click }}) </span>
                                 <span> | </span>
                                 <span> 分类： <a href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
                             </small>
                         </p>
                         <div class="blog-content">
+                            <div class="blog-article">
                         {{ blog.content|safe }}
+                                </div>
+                            <div class="blog-func">
+                            <div class="blog-prev">
+                                {% if prev_blog %}
+                                <p>上一篇：<a href="/blog/{{ prev_blog.id }}/">{{ prev_blog.title }}</a></p>
+                                {% else %}
+                                <p>上一篇：没有了</p>
+                                {% endif %}
+                            </div>
+                            <div class="blog-next">
+                                {% if next_blog %}
+                                <p>下一篇：<a href="/blog/{{ next_blog.id }}/">{{ next_blog.title }}</a></p>
+                                {% else %}
+                                <p>下一篇：没有了</p>
+                                {% endif %}
+                            </div>
+                            <div class="blog-share">
+                                <div class="bshare-custom"><a title="分享到" href="http://www.bShare.cn/" id="bshare-shareto" class="bshare-more">分享到</a><a title="分享到微信" class="bshare-weixin">微信</a><a title="分享到QQ空间" class="bshare-qzone">QQ空间</a><a title="分享到新浪微博" class="bshare-sinaminiblog">新浪微博</a><a title="分享到QQ好友" class="bshare-qqim">QQ好友</a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><a class="bshareDiv" onclick="javascript:return false;"></a><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+                            </div></div>
                         </div>
 						<div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
 							<p class="tags">
@@ -37,6 +57,6 @@
 						</div>
                     </article>
 			</div>
-		</div>		
+		</div>
 	</div>
 	{% endblock content %}

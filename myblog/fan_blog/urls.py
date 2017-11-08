@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^category/(\d+)/$', views.category),
     url(r'^index/$', views.index),
     url(r'^tags/(\d+)/$', views.tags),
+    url(r'^get_tags/$', views.get_tags),
+    url(r'^get_hot/$', views.get_hot),
     url(r'^results/$', views.results),
     url(r'^profile/$', views.profile),
 ]

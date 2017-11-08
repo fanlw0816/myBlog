@@ -59,7 +59,7 @@ a:hover{
     transform: translate(0, -10px);
 }
 
-.cate-format{
+.cate-format,.tag-format,.later-format{
     /*box-shadow: rgb(247, 239, 239) 5px 5px 20px;*/
     box-shadow: rgb(50, 50, 50) 5px 5px 20px;
     background-color: #D4CACA;
@@ -67,6 +67,42 @@ a:hover{
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
+}
+
+.tag-title,.later-title{
+    padding-bottom: 10px;
+    border-bottom: 1px solid white;
+}
+
+.tags-show, .later-show{
+    padding: 10px 5px;
+}
+
+.tag-format .tags-show a{
+    display: inline-block;
+    margin-top: 12px;
+    margin-right: 4px;
+    color: white;
+    font-size: 8px;
+}
+
+.tag-format .tags-show a span{
+    font-weight: normal;
+}
+
+.later-show ol{
+    /*list-style: none;*/
+    padding-left: 10px;
+    margin: 10px 0 0;
+}
+
+.later-show ol li{
+    height: 24px;
+    line-height:24px;
+}
+
+.later-show ol a{
+    color: #334;;
 }
 
 .cate-active{
@@ -89,7 +125,7 @@ a:hover{
 }
 
 .cate-li li a{
-    color: #828783;
+    color: #334;
 }
 
 .blog-content{
@@ -235,3 +271,35 @@ small span:not(.glyphicon){
     padding-right: 10px;
 }
 
+.profile-all{
+    margin-left: 100px;
+    margin-top: 40px;
+}
+
+.profile-all li{
+    height: 30px;
+    line-height: 30px;
+}
+
+.blog-article{
+    margin-bottom: 40px;
+}
+
+.blog-func{
+    border-top: 1px solid darkgray;
+    padding: 20px 10px;
+}
+
+.blog-func .blog-prev, .blog-func .blog-next{
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.blog-func .blog-share{
+    margin-top: 30px;
+    background-color: #b5bcb6;
+    color: #0e4f5e;
+    padding: 5px 0 5px 10px;
+}

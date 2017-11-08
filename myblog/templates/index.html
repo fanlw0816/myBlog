@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load calculate %}
+{% block header %}
+    <script src="/static/js/show.js"></script>
+{% endblock header %}
 {% block content %}
     <div class="jumbotron">
         <div class="container">
@@ -12,22 +15,42 @@
         <div class="row">
             <div class="col-md-3 col-md-offset-0 col-sm-3 col-sm-offset-0 col-xs-12">
                 <div class="cate-format the-font">
-                    <div class="category"><h3 style="color: #828783;"><span class="glyphicon glyphicon-tree-deciduous"
-                                                                            aria-hidden="true"></span>&nbsp;分类文章</h3></div>
-{#                    <hr> // style="border-top:1px solid white;">#}
+                    <div class="category"><h3 style="color: #334;">
+                        <span class="glyphicon glyphicon-tree-deciduous" aria-hidden="true">
+                        </span>&nbsp;分类文章</h3>
+                    </div>
                     <hr>
                     <div class="cate-li">
                         {% for category in categorys %}
                             <li{% if cid == category.id %} class="cate-active" {% endif %}><a
-                                    href="/category/{{ category.id }}/">{{ category.name }}</a><span class="cate-number">{{ category.blog_set.all.count }}</span></li>
+                                    href="/category/{{ category.id }}/">{{ category.name }}</a><span
+                                    class="cate-number">{{ category.blog_set.all.count }}</span></li>
                         {% endfor %}
+                    </div>
+                </div>
+                <div class="tag-format">
+                    <div class="tag-title">
+                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                        <span>标签</span>
+                    </div>
+                    <div class="tags-show">
+                    </div>
+                </div>
+                <div class="later-format">
+                    <div class="later-title">
+                        <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                        <span>最热文章</span>
+                    </div>
+                    <div class="later-show">
+                        <ol>
+                        </ol>
                     </div>
                 </div>
             </div>
             <div class="col-md-9 col-md-offset-0 col-sm-9 col-sm-offset-0 col-xs-12">
                 {% for blog in page %}
                     <article class="article-format the-font">
-                        <a href="/blog/{{ blog.id }}/"><h3 style="color:#8c3e2a">{{ blog.title }}</h3></a>
+                        <a href="/blog/{{ blog.id }}/"><h3 style="color:#8c3e2a;font-size: 36px">{{ blog.title }}</h3></a>
                         <p>
                             <small>
                                 <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
@@ -35,7 +58,8 @@
                                 <span> | </span>
                                 <span> 阅读量: {{ blog.click }} </span>
                                 <span> | </span>
-                                <span> 分类： <a href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
+                                <span> 分类： <a
+                                        href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
                             </small>
                         </p>
                         <p>{{ blog.content|truncatewords:20|safe }}</p>
@@ -43,10 +67,11 @@
                             <p class="tags">
                                 <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
                                 {% for tag in blog.tags.all %}
-                                    <a href="/tags/{{ tag.id }}/"><span class="label label-default text-left">{{ tag.name }}</span></a>
+                                    <a href="/tags/{{ tag.id }}/"><span
+                                            class="label label-default text-left">{{ tag.name }}</span></a>
                                 {% endfor %}
                                 <a href="/blog/{{ blog.id }}/" style="float:right">
-                                    <button class="btn btn-info"> 了解更多</button>
+                                    <button class="btn btn-info"> 阅读全部</button>
                                 </a>
                             </p>
                         </div>
@@ -57,6 +82,11 @@
                     <ul class="pagination">
                         {% if page.has_previous %}
                             <li>
+                                <a href="/{{ kind }}/?page=1" aria-label="Previous">
+                                    <span aria-hidden="true">首页</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="/{{ kind }}/?page={{ page.number|subtract }}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
@@ -64,24 +94,74 @@
                         {% else %}
                             <li class="disabled">
                                 <span>
+                                    <span aria-hidden="true">首页</span>
+                                </span>
+                            </li>
+                            <li class="disabled">
+                                <span>
                                     <span aria-hidden="true">&laquo;</span>
                                 </span>
                             </li>
                         {% endif %}
-                        {% for index in page.paginator.page_range %}
-                            {% if page.number == index %}
-                                <li class="active">
-                                    <span>{{ index }}<span class="sr-only">(current)</span></span>
-                                </li>
+
+                        {% if page.paginator.num_pages <= 5 %}
+                            {% for index in page.paginator.page_range %}
+                                {% if page.number == index %}
+                                    <li class="active">
+                                        <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                    </li>
+                                {% else %}
+                                    <li><a href="/{{ kind }}/?page={{ index }}">{{ index }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% if page.number <= 3 %}
+                                {% for index in page.number|slice1 %}
+                                    {% if page.number == index %}
+                                        <li class="active">
+                                            <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                        </li>
+                                    {% else %}
+                                        <li><a href="/{{ kind }}/?page={{ index }}">{{ index }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li><span>...<span class="sr-only">(current)</span></span></li>
+
+                            {% elif page.number >= page.paginator.num_pages|add:-2 %}
+                                <li><span>...<span class="sr-only">(current)</span></span></li>
+                                {% for index in page.paginator.num_pages|slice2 %}
+                                    {% if page.number == index %}
+                                        <li class="active">
+                                            <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                        </li>
+                                    {% else %}
+                                        <li><a href="/{{ kind }}/?page={{ index }}">{{ index }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
                             {% else %}
-                                <li><a href="/{{ kind }}/?page={{ index }}">{{ index }}</a></li>
+                                <li><span>...<span class="sr-only">(current)</span></span></li>
+                                {% for index in page.number|slice %}
+                                    {% if page.number == index %}
+                                        <li class="active">
+                                            <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                        </li>
+                                    {% else %}
+                                        <li><a href="/{{ kind }}/?page={{ index }}">{{ index }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li><span>...<span class="sr-only">(current)</span></span></li>
                             {% endif %}
-                        {% endfor %}
+                        {% endif %}
 
                         {% if page.has_next %}
                             <li>
                                 <a href="/{{ kind }}/?page={{ page.number|plus }}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/{{ kind }}/?page={{ page.paginator.num_pages }}" aria-label="Next">
+                                    <span aria-hidden="true">末页</span>
                                 </a>
                             </li>
                         {% else %}
@@ -90,12 +170,15 @@
                                 <span aria-hidden="true">&raquo;</span>
                             </span>
                             </li>
-                        {% endif %}}
+                            <li class="disabled">
+                            <span>
+                                <span aria-hidden="true">末页</span>
+                            </span>
+                            </li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
-
-
         </div>
 
     </div>

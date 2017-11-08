@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from .models import Category, Blog, Tag
 from django.core.paginator import *
+
 
 # Create your views here.
 
@@ -12,9 +14,11 @@ def index(request):
     page = paginator.page(pindex)
 
     categorys = Category.objects.all()
+    tags_show = Tag.objects.all()
     context = {
         'page': page,
         'categorys': categorys,
+        'tags': tags_show,
         'kind': 'index'
     }
 
@@ -25,8 +29,27 @@ def details(request, bid):
     blog = Blog.objects.get(id=bid)
     blog.click += 1
     blog.save()
+
+    blogs = blog.category.blog_set.all().order_by('id')
+    blog_index = list(blogs).index(blog)
+    lenght = len(blogs)
+    prev_index = blog_index - 1
+    next_index = blog_index + 1
+
+    if prev_index < 0:
+        prev_blog = None
+    else:
+        prev_blog = blogs[prev_index]
+
+    if next_index >= lenght:
+        next_blog = None
+    else:
+        next_blog = blogs[next_index]
+
     context = {
-        'blog': blog
+        'blog': blog,
+        'prev_blog': prev_blog,
+        'next_blog': next_blog
     }
     return render(request, 'detail.html', context)
 
@@ -35,12 +58,14 @@ def category(request, cid):
     pindex = int(request.GET.get('page', 1))
     blogs = Category.objects.get(id=cid).blog_set.order_by("-created")
     categorys = Category.objects.all()
+    tags_show = Tag.objects.all()
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
     context = {
         'cid': int(cid),
         'page': page,
         'categorys': categorys,
+        'tags': tags_show,
         'kind': "category/" + str(cid)
     }
 
@@ -59,6 +84,30 @@ def tags(request, tid):
         'kind': "tags/" + str(tid)
     }
     return render(request, 'search_result.html', context)
+
+
+def get_tags(request):
+    tags_show = Tag.objects.all()
+    datas = []
+    for tag in tags_show:
+        info = {}
+        info['id'] = tag.id
+        info['name'] = tag.name
+        datas.append(info)
+
+    return JsonResponse({"datas": datas})
+
+
+def get_hot(request):
+    blogs = Blog.objects.all().order_by('-click')[:6]
+    datas = []
+    for blog in blogs:
+        info = {}
+        info['id'] = blog.id
+        info['title'] = blog.title
+        datas.append(info)
+
+    return JsonResponse({"datas": datas})
 
 
 def results(request):

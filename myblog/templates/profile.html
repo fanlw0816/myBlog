@@ -1,15 +1,44 @@
 {% extends "base.html" %}
-    {% block content %}
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <article class="article-format the-font">
-                        <h2>About Me</h2>
+{% block content %}
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <article class="article-format the-font">
+                    <h1>About Me</h1>
+                    <div class="profile-all">
+                        <div class="profile-presonal">
+                            <h3>个人资料</h3>
+                            <ul>
+                                <li>范立伟</li>
+                                <li>1992.8</li>
+                                <li>江西</li>
+                                <li>毕业学校：青岛理工大学</li>
+                                <li>专业：网络工程</li>
+                                <li>学位：学士</li>
+                                <li>简介：主要从事<code>python</code>相关工作， 喜欢交友研究技术。</li>
+                                <li>Github：<a href="https://github.com/fanlw0816">https://github.com/fanlw0816</a></li>
+                                <li>Blog：http://fanliwei.info</li>
+                            </ul>
+                        </div>
+                        <div class="profile-skills">
+                            <h3>技能</h3>
+                            <ul>
+                                <li>语言：<code>Python</code>, <code>HTML</code>, <code>CSS</code>, <code>JQUERY</code>
+                                </li>
+                                <li>框架：<code>Scrapy</code>, <code>Django</code>, <code>Flask</code>,
+                                    <code>Bootstrap</code></li>
+                                <li>Linux：<code>Ubuntu</code>, <code>CentOS</code>, <code>Redhet</code></li>
+                                <li>服务器：<code>Nginx</code></li>
+                                <li>数据库：<code>MySQL</code>, <code>Redis</code>, <code>MongoDB</code></li>
+                                <li>设计：<code>Photoshop</code></li>
+                            </ul>
+                        </div>
+                    </div>
 
-                    </article>
-                </div>
+                </article>
             </div>
         </div>
+    </div>
 
-    {% endblock content %}
+{% endblock content %}

@@ -63,7 +63,7 @@ window.onload = function() {
             return params;
         }
     }
-}
+};
 
 // 置顶
 $(function(){
