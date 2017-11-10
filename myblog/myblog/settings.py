@@ -24,7 +24,7 @@ SECRET_KEY = 'd6m3ugwvj)jnx&5-vd2t0xpj=)j@p0k#x%*4cj(=cx65z=n^fo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*',]
 
@@ -129,7 +129,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/var/www/myblog/static'
 
 # upload folder
 MEDIA_URL = '/media/'
