@@ -21,7 +21,7 @@ window.onload = function() {
         var second = now.getSeconds();
 
         var oBox = document.getElementById('box');
-        oBox.innerHTML = "Now：&nbsp;&nbsp;" + year + "-" + format(month + 1) + "-" + format(date) + "&nbsp;&nbsp;" + week(day) + "&nbsp;&nbsp;" + format(hour) + ":" + format(minute) + ":" + format(second);
+        oBox.innerHTML = year + "-" + format(month + 1) + "-" + format(date) + "&nbsp;&nbsp;" + week(day) + "&nbsp;&nbsp;" + format(hour) + ":" + format(minute) + ":" + format(second);
     }
 
 
