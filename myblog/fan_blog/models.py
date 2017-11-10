@@ -24,6 +24,7 @@ class Blog(models.Model):
     content = UEditorField('内容', height=500, width=1200,
                  default='', blank=True, imagePath="images/",
                  toolbars='full', filePath='files/')
+    intro = UEditorField('简介', width=600, height=300, default='', toolbars='full')
     created = models.DateTimeField('发布时间', auto_now_add=True)
     click = models.IntegerField(default=0)
 

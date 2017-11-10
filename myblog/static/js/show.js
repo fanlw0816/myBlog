@@ -15,7 +15,7 @@ $(function () {
             $('.tags-show').append(new_tag);
 
         }
-    })
+    });
 
     $.get('/get_hot/', function (datas) {
         var data = datas.datas;

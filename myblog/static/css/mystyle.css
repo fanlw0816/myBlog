@@ -91,7 +91,6 @@ a:hover{
 }
 
 .later-show ol{
-    /*list-style: none;*/
     padding-left: 10px;
     margin: 10px 0 0;
 }
@@ -116,7 +115,7 @@ a:hover{
 .category{
     /* text-align: center; */
     color: #34495E;
-    padding-left: 30px;
+    padding-left: 10px;
 }
 
 .cate-li{
