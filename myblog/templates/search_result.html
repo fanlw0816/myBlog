@@ -21,7 +21,7 @@
                                 <span> 分类： <a href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
                             </small>
                         </p>
-                        <p>{{ blog.content|truncatewords:20|safe }}</p>
+                        <p>{{ blog.intro|safe }}</p>
                         <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
                             <p class="tags">
                                 <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
