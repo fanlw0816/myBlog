@@ -13,7 +13,7 @@ def index(request):
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
 
-    categorys = Category.objects.filter(isDelete=False)
+    categorys = get_category()
     # tags_show = Tag.objects.all()
     context = {
         'page': page,
@@ -23,6 +23,19 @@ def index(request):
     }
 
     return render(request, 'index.html', context)
+
+
+def get_category():
+    categorys = Category.objects.filter(isDelete=False)
+    category_list = []
+    for cate in categorys:
+        cate_one = {}
+        cate_one['name'] = cate.name
+        cate_one['id'] = cate.id
+        cate_one['count'] = cate.blog_set.filter(isDelete=False).count()
+        category_list.append(cate_one)
+
+    return category_list
 
 
 def details(request, bid):
@@ -60,12 +73,12 @@ def details(request, bid):
 
 def category(request, cid):
     try:
-        blogs = Category.objects.get(id=cid, isDelete=False).blog_set.order_by("-created")
+        blogs = Category.objects.get(id=cid, isDelete=False).blog_set.filter(isDelete=False).order_by("-created")
     except:
         raise Http404
 
     pindex = int(request.GET.get('page', 1))
-    categorys = Category.objects.filter(isDelete=False)
+    categorys = get_category()
     # tags_show = Tag.objects.all()
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
@@ -126,7 +139,7 @@ def results(request):
     pindex = int(request.GET.get('page', 1))
 
     keyword = request.GET["keyword"]
-    blogs = Blog.objects.filter(title__icontains = keyword, isDelete=False).order_by("-created")
+    blogs = Blog.objects.filter(title__icontains=keyword, isDelete=False).order_by("-created")
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
     context = {
