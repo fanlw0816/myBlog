@@ -23,7 +23,7 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^mgt_admin/', admin.site.urls),
     url(r'^media/(?P<path>.*)/$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^favicon.ico$',RedirectView.as_view(url=r'/static/images/favicon.ico', permanent=True)),
     url(r'^ueditor/', include('DjangoUeditor.urls' )),

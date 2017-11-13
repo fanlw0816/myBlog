@@ -14,7 +14,11 @@ a:hover{
 
 .navbar-li,.navbar-brand{
     font-size: 25px;
-    margin-left: 30px;
+    /*margin-left: 30px;*/
+}
+
+.container div .navbar-form{
+    padding: 0px 5px;
 }
 
 .jumbotron{
@@ -274,7 +278,6 @@ small span:not(.glyphicon){
 }
 
 .profile-all{
-    margin-left: 100px;
     margin-top: 40px;
 }
 
