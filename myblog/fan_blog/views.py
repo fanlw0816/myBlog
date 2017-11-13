@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from .models import Category, Blog, Tag
+from django.http import JsonResponse, Http404
+from .models import *
 from django.core.paginator import *
 
 
@@ -9,16 +9,16 @@ from django.core.paginator import *
 
 def index(request):
     pindex = int(request.GET.get('page', 1))
-    blogs = Blog.objects.order_by("-created")
+    blogs = Blog.objects.filter(isDelete=False).order_by("-created")
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
 
-    categorys = Category.objects.all()
-    tags_show = Tag.objects.all()
+    categorys = Category.objects.filter(isDelete=False)
+    # tags_show = Tag.objects.all()
     context = {
         'page': page,
         'categorys': categorys,
-        'tags': tags_show,
+        # 'tags': tags_show,
         'kind': 'index'
     }
 
@@ -26,11 +26,15 @@ def index(request):
 
 
 def details(request, bid):
-    blog = Blog.objects.get(id=bid)
+    try:
+        blog = Blog.objects.get(id=bid, isDelete=False)
+    except:
+        raise Http404
+
     blog.click += 1
     blog.save()
 
-    blogs = blog.category.blog_set.all().order_by('id')
+    blogs = blog.category.blog_set.filter(isDelete=False).order_by('id')
     blog_index = list(blogs).index(blog)
     lenght = len(blogs)
     prev_index = blog_index - 1
@@ -55,17 +59,21 @@ def details(request, bid):
 
 
 def category(request, cid):
+    try:
+        blogs = Category.objects.get(id=cid, isDelete=False).blog_set.order_by("-created")
+    except:
+        raise Http404
+
     pindex = int(request.GET.get('page', 1))
-    blogs = Category.objects.get(id=cid).blog_set.order_by("-created")
-    categorys = Category.objects.all()
-    tags_show = Tag.objects.all()
+    categorys = Category.objects.filter(isDelete=False)
+    # tags_show = Tag.objects.all()
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
     context = {
         'cid': int(cid),
         'page': page,
         'categorys': categorys,
-        'tags': tags_show,
+        # 'tags': tags_show,
         'kind': "category/" + str(cid)
     }
 
@@ -73,9 +81,13 @@ def category(request, cid):
 
 
 def tags(request, tid):
+    try:
+        tag = Tag.objects.get(id=tid, isDelete=False)
+    except:
+        raise Http404
+
     pindex = int(request.GET.get('page', 1))
-    tag = Tag.objects.get(id=tid)
-    blogs = tag.blog_set.order_by("-created")
+    blogs = tag.blog_set.filter(isDelete=False).order_by("-created")
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
     context = {
@@ -87,7 +99,7 @@ def tags(request, tid):
 
 
 def get_tags(request):
-    tags_show = Tag.objects.all()
+    tags_show = Tag.objects.filter(isDelete=False)
     datas = []
     for tag in tags_show:
         info = {}
@@ -99,7 +111,7 @@ def get_tags(request):
 
 
 def get_hot(request):
-    blogs = Blog.objects.all().order_by('-click')[:6]
+    blogs = Blog.objects.filter(isDelete=False).order_by('-click')[:6]
     datas = []
     for blog in blogs:
         info = {}
@@ -114,13 +126,14 @@ def results(request):
     pindex = int(request.GET.get('page', 1))
 
     keyword = request.GET["keyword"]
-    blogs = Blog.objects.filter(title__icontains = keyword).order_by("-created")
+    blogs = Blog.objects.filter(title__icontains = keyword, isDelete=False).order_by("-created")
     paginator = Paginator(blogs, 3)
     page = paginator.page(pindex)
     context = {
         'result': keyword,
         'page': page,
-        'kind': "results"
+        'kind': "results",
+        'keyword': '&keyword=%s' % keyword
     }
 
     return render(request, 'search_result.html', context)
