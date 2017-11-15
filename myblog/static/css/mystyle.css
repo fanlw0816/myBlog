@@ -308,3 +308,11 @@ small span:not(.glyphicon){
     color: #0e4f5e;
     padding: 5px 0 5px 10px;
 }
+
+img{
+    max-width: 100%;
+}
+
+td{
+    max-width: 100%;
+}
