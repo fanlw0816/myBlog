@@ -1,141 +1,179 @@
 {% extends "base.html" %}
 {% load calculate %}
+{% block header %}
+    <script>
+        $(function () {
+            if ($('.result-null').length > 0) {
+                $.get('/get_hot/', function (datas) {
+                    var data = datas.datas;
+                    for (var i = 0; i < data.length; i++) {
+                        var new_tag = '<li><a href="/blog/' + data[i].id + '/">' + data[i].title + '</a></li>'
+                        $('.result-null ol').append(new_tag);
+                    }
+                });
+            }
+        })
+    </script>
+{% endblock header %}
+
 {% block content %}
     <hr>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-            <div class="result-tip">
-                <h3>{{ result }}结果如下：</h3>
-            </div>
-                {% for blog in page %}
-                    <article class="article-format the-font">
-                        <a href="/blog/{{ blog.id }}/"><h3 style="color:#8c3e2a;font-size: 36px">{{ blog.title }}</h3></a>
-                        <p>
-                            <small>
-                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                <span>{{ blog.created }}</span>
-                                <span> | </span>
-                                <span> 阅读量: {{ blog.click }} </span>
-                                <span> | </span>
-                                <span> 分类： <a href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
-                            </small>
-                        </p>
-                        <p>{{ blog.intro|safe }}</p>
-                        <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
-                            <p class="tags">
-                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
-                                {% for tag in blog.tags.all %}
-                                    <a href="/tags/{{ tag.id }}"><span class="label label-default text-left">{{ tag.name }}</span></a>
-                                {% endfor %}
-                                <a href="/blog/{{ blog.id }}/" style="float:right">
-                                    <button class="btn  btn-info"> 阅读全部
-                                    </button>
-                                </a>
-                            </p>
+                <div class="result-page">
+                    {% if page|length_is:0 %}
+                        <div class="result-tip">
+                            <h3>结果为空,推荐阅读：</h3>
                         </div>
-                    </article>
-                {% endfor %}
-                <nav aria-label="Page navigation" class="Page">
-                      <ul class="pagination">
-                        {% if page.has_previous %}
-                            <li>
-                                <a href="/{{ kind }}/?page=1{{ keyword }}" aria-label="Previous">
-                                    <span aria-hidden="true">首页</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/{{ kind }}/?page={{ page.number|subtract }}{{ keyword }}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
-                                <span>
-                                    <span aria-hidden="true">首页</span>
-                                </span>
-                            </li>
-                            <li class="disabled">
-                                <span>
-                                    <span aria-hidden="true">&laquo;</span>
-                                </span>
-                            </li>
-                        {% endif %}
-
-                        {% if page.paginator.num_pages <= 5 %}
-                            {% for index in page.paginator.page_range %}
-                                {% if page.number == index %}
-                                    <li class="active">
-                                        <span>{{ index }}<span class="sr-only">(current)</span></span>
+                        <div class="result-null">
+                            <ol>
+                            </ol>
+                        </div>
+                    {% else %}
+                        <div class="result-tip">
+                            <h3><strong>{{ result }}</strong>&nbsp;&nbsp;&nbsp;的结果如下：</h3>
+                        </div>
+                        {% for blog in page %}
+                            <article class="article-format the-font">
+                                <a href="/blog/{{ blog.id }}/"><h3
+                                        style="color:#8c3e2a;font-size: 36px">{{ blog.title }}</h3></a>
+                                <p>
+                                    <small>
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                        <span>{{ blog.created }}</span>
+                                        <span> | </span>
+                                        <span> 阅读量: {{ blog.click }} </span>
+                                        <span> | </span>
+                                        <span> 分类： <a
+                                                href="/category/{{ blog.category.id }}/">{{ blog.category.name }}</a></span>
+                                    </small>
+                                </p>
+                                <p>{{ blog.intro|safe }}</p>
+                                <div style="border-top:1px solid #EBEBEB;padding:10px 5px;margin-top:20px;">
+                                    <p class="tags">
+                                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
+                                        {% for tag in blog.tags.all %}
+                                            <a href="/tags/{{ tag.id }}"><span
+                                                    class="label label-default text-left">{{ tag.name }}</span></a>
+                                        {% endfor %}
+                                        <a href="/blog/{{ blog.id }}/" style="float:right">
+                                            <button class="btn  btn-info"> 阅读全部
+                                            </button>
+                                        </a>
+                                    </p>
+                                </div>
+                            </article>
+                        {% endfor %}
+                        <nav aria-label="Page navigation" class="Page">
+                            <ul class="pagination">
+                                {% if page.has_previous %}
+                                    <li>
+                                        <a href="/{{ kind }}/?page=1{{ keyword }}" aria-label="Previous">
+                                            <span aria-hidden="true">首页</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/{{ kind }}/?page={{ page.number|subtract }}{{ keyword }}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
                                     </li>
                                 {% else %}
-                                    <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a></li>
+                                    <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">首页</span>
+                                </span>
+                                    </li>
+                                    <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;</span>
+                                </span>
+                                    </li>
                                 {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            {% if page.number <= 3 %}
-                                {% for index in page.number|slice1 %}
-                                    {% if page.number == index %}
-                                        <li class="active">
-                                            <span>{{ index }}<span class="sr-only">(current)</span></span>
-                                        </li>
-                                    {% else %}
-                                        <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                                <li><span>...<span class="sr-only">(current)</span></span></li>
 
-                            {% elif page.number >= page.paginator.num_pages|add:-2 %}
-                                <li><span>...<span class="sr-only">(current)</span></span></li>
-                                {% for index in page.paginator.num_pages|slice2 %}
-                                    {% if page.number == index %}
-                                        <li class="active">
-                                            <span>{{ index }}<span class="sr-only">(current)</span></span>
-                                        </li>
-                                    {% else %}
-                                        <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <li><span>...<span class="sr-only">(current)</span></span></li>
-                                {% for index in page.number|slice %}
-                                    {% if page.number == index %}
-                                        <li class="active">
-                                            <span>{{ index }}<span class="sr-only">(current)</span></span>
-                                        </li>
-                                    {% else %}
-                                        <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                                <li><span>...<span class="sr-only">(current)</span></span></li>
-                            {% endif %}
-                        {% endif %}
+                                {% if page.paginator.num_pages <= 5 %}
+                                    {% for index in page.paginator.page_range %}
+                                        {% if page.number == index %}
+                                            <li class="active">
+                                                <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                            </li>
+                                        {% else %}
+                                            <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {% if page.number <= 3 %}
+                                        {% for index in page.number|slice1 %}
+                                            {% if page.number == index %}
+                                                <li class="active">
+                                                    <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                                </li>
+                                            {% else %}
+                                                <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <li><span>...<span class="sr-only">(current)</span></span></li>
 
-                        {% if page.has_next %}
-                            <li>
-                                <a href="/{{ kind }}/?page={{ page.number|plus }}{{ keyword }}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/{{ kind }}/?page={{ page.paginator.num_pages }}{{ keyword }}" aria-label="Next">
-                                    <span aria-hidden="true">末页</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
+                                    {% elif page.number >= page.paginator.num_pages|add:-2 %}
+                                        <li><span>...<span class="sr-only">(current)</span></span></li>
+                                        {% for index in page.paginator.num_pages|slice2 %}
+                                            {% if page.number == index %}
+                                                <li class="active">
+                                                    <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                                </li>
+                                            {% else %}
+                                                <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <li><span>...<span class="sr-only">(current)</span></span></li>
+                                        {% for index in page.number|slice %}
+                                            {% if page.number == index %}
+                                                <li class="active">
+                                                    <span>{{ index }}<span class="sr-only">(current)</span></span>
+                                                </li>
+                                            {% else %}
+                                                <li><a href="/{{ kind }}/?page={{ index }}{{ keyword }}">{{ index }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <li><span>...<span class="sr-only">(current)</span></span></li>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if page.has_next %}
+                                    <li>
+                                        <a href="/{{ kind }}/?page={{ page.number|plus }}{{ keyword }}"
+                                           aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/{{ kind }}/?page={{ page.paginator.num_pages }}{{ keyword }}"
+                                           aria-label="Next">
+                                            <span aria-hidden="true">末页</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
                             <span>
                                 <span aria-hidden="true">&raquo;</span>
                             </span>
-                            </li>
-                            <li class="disabled">
+                                    </li>
+                                    <li class="disabled">
                             <span>
                                 <span aria-hidden="true">末页</span>
                             </span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

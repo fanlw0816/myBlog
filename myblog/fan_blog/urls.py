@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^get_hot/$', views.get_hot),
     url(r'^results/$', views.results),
     url(r'^profile/$', views.profile),
+    url(r'^visitor_number/$', views.visitor_number),
 ]

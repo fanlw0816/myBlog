@@ -48,3 +48,7 @@ class Comment(models.Model):
     created = models.DateTimeField('发布时间', auto_now_add=True)
     parent = models.ForeignKey('self', null=True, blank=True)
 
+
+class Browse(models.Model):
+
+    number = models.IntegerField(default=0)

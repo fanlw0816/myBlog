@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)/$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^favicon.ico$',RedirectView.as_view(url=r'/static/images/favicon.ico', permanent=True)),
     url(r'^ueditor/', include('DjangoUeditor.urls' )),
-    url(r'^robots\.txt$', lambda r: HttpResponse('User-agent: *\nDisallow: /admin', content_type='text/plain')),
+    url(r'^robots\.txt$', lambda r: HttpResponse('User-agent: *\nDisallow: /mgt_admin', content_type='text/plain')),
     url(r'^', include('fan_blog.urls')),
 ]
 

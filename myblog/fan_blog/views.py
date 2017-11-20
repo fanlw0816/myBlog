@@ -155,3 +155,8 @@ def results(request):
 def profile(request):
 
     return render(request, 'profile.html')
+
+def visitor_number(request):
+    brose = Browse.objects.all()[0]
+    return JsonResponse({'number': brose.number})
+

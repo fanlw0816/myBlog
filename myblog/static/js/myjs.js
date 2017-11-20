@@ -78,8 +78,13 @@ $(function(){
             {
                 $back.slideUp();
             }
-    })
+    });
     $back.click(function () {
         $("html,body").animate({"scrollTop":0});
+    });
+
+    $.get('/visitor_number/', function (data) {
+        var iNumber = data.number;
+        $('.footer p:eq(0) em:eq(0)').text(iNumber);
     })
-})
+});

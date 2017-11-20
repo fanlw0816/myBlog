@@ -313,6 +313,24 @@ img{
     max-width: 100%;
 }
 
-td{
-    max-width: 100%;
+table{
+    /*word-break: break-all;*/
+    white-space: nowrap;
+}
+
+.result-null{
+    padding: 50px 10px;
+    background-color: rgb(212, 202, 202);
+    margin-bottom: 60px;
+    box-shadow: rgb(50, 50, 50) 5px 5px 20px;
+}
+
+.result-null ol{
+    margin: 5px auto;
+    width: 300px;
+}
+
+.result-null li a{
+    font-size: 20px;
+    color: #423E3E;
 }

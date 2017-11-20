@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd6m3ugwvj)jnx&5-vd2t0xpj=)j@p0k#x%*4cj(=cx65z=n^fo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
 DEBUG = False
+# DEBUG = True
 
 ALLOWED_HOSTS = ['*',]
 
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'fan_blog.browsemiddleware.BrowseMiddleware',
 ]
 
 ROOT_URLCONF = 'myblog.urls'
