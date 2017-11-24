@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponse
 from .models import *
 from django.core.paginator import *
-
+from PIL import Image, ImageDraw, ImageFont
+import string, random
 
 # Create your views here.
 
@@ -44,8 +45,6 @@ def details(request, bid):
     except:
         raise Http404
 
-    blog.click += 1
-    blog.save()
 
     blogs = blog.category.blog_set.filter(isDelete=False).order_by('id')
     blog_index = list(blogs).index(blog)
@@ -60,6 +59,7 @@ def details(request, bid):
 
     if next_index >= lenght:
         next_blog = None
+
     else:
         next_blog = blogs[next_index]
 
@@ -68,7 +68,16 @@ def details(request, bid):
         'prev_blog': prev_blog,
         'next_blog': next_blog
     }
-    return render(request, 'detail.html', context)
+    response = render(request, 'detail.html', context)
+    article_flags = request.COOKIES.get('article_flags', '')
+    flag_list = article_flags.split('==')
+    if bid not in flag_list:
+        blog.click += 1
+        blog.save()
+        flag_list.append(bid)
+        response.set_cookie('article_flags', '=='.join(flag_list), expires=60*60*24*7)
+
+    return response
 
 
 def category(request, cid):
@@ -160,3 +169,46 @@ def visitor_number(request):
     brose = Browse.objects.all()[0]
     return JsonResponse({'number': brose.number})
 
+def captcha(request):
+    # 定义变量，用于画面的背景色、宽、高
+    bgcolor = (random.randrange(20, 100), random.randrange(
+        20, 100), 255)
+    width = 100
+    height = 25
+    # 创建画面对象
+    im = Image.new('RGB', (width, height), bgcolor)
+    # 创建画笔对象
+    draw = ImageDraw.Draw(im)
+    # 调用画笔的point()函数绘制噪点
+    for i in range(0, 100):
+        xy = (random.randrange(0, width), random.randrange(0, height))
+        fill = (random.randrange(0, 255), 255, random.randrange(0, 255))
+        draw.point(xy, fill=fill)
+    # 定义验证码的备选值
+    str1 = 'ABCD123EFGHIJK456LMNOPQRS789TUVWXYZ0'
+    # 随机选取4个值作为验证码
+    rand_str = ''
+    for i in range(0, 4):
+        rand_str += str1[random.randrange(0, len(str1))]
+    # 构造字体对象，ubuntu的字体路径为“/usr/share/fonts/truetype/freefont”
+    font = ImageFont.truetype('FreeMono.ttf', 23)
+    # 构造字体颜色
+    fontcolor = (255, random.randrange(0, 255), random.randrange(0, 255))
+    # 绘制4个字
+    draw.text((5, 2), rand_str[0], font=font, fill=fontcolor)
+    draw.text((25, 2), rand_str[1], font=font, fill=fontcolor)
+    draw.text((50, 2), rand_str[2], font=font, fill=fontcolor)
+    draw.text((75, 2), rand_str[3], font=font, fill=fontcolor)
+    # 释放画笔
+    del draw
+    # 存入session，用于做进一步验证
+    request.session['verifycode'] = rand_str
+
+    # 内存文件操作(python3)
+    from io import BytesIO
+    buf = BytesIO()
+
+    # 将图片保存在内存中，文件类型为png
+    im.save(buf, 'png')
+    # 将内存中的图片数据返回给客户端，MIME类型为图片png
+    return HttpResponse(buf.getvalue(), 'image/png')

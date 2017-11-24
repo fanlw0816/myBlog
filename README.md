@@ -10,7 +10,17 @@
 # 历史
 #### 2017-8
 
-create a blog program  
+- create a blog program  
+
+---
+
+# TODO
+- [x] ~~站点浏览量统计~~
+- [ ] blog评论功能
+- [ ] 站内搜索功能
+- [ ] 邮件推送  
+
+---
 
 
 

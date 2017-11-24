@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^results/$', views.results),
     url(r'^profile/$', views.profile),
     url(r'^visitor_number/$', views.visitor_number),
+    url(r'^captcha/$', views.captcha),
 ]

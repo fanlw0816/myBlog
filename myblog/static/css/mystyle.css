@@ -268,8 +268,9 @@ blockquote{
 .result-tip{
     padding-bottom: 30px;
     line-height: 30px;
-    font-size: 20px;
     color: white;
+    font: 24px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    text-shadow: 1px 1px 1px #949494;
 }
 
 small span:not(.glyphicon){
