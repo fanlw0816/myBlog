@@ -4,6 +4,8 @@ from .models import *
 from django.core.paginator import *
 from PIL import Image, ImageDraw, ImageFont
 import string, random
+from django.conf import settings
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -241,6 +243,7 @@ def commit_comment(request):
     data = request.POST
     print(data)
     blog_id = data.get('b_id')
+    blog = Blog.objects.get(id=blog_id)
     parent_id = data.get('p_id')
     nickname = data.get('nickname')
     email = data.get('email')
@@ -253,9 +256,18 @@ def commit_comment(request):
     comment_one.email = email
     comment_one.content = comment
     if parent_id:
-        print(11111)
         comment_one.parent_id = int(parent_id)
     comment_one.save()
+
+    msg = '<div><div><p>昵称：%s</p>\
+            <p>邮箱：%s</p>\
+            <p>链接：%s</p>\
+            <p>来自博客：<a href="http://fanliwei.top/blog/%s/">%s</p>\
+            </div><p>评论内容：%s</p></div>' % (nickname, email, link, blog_id, blog.title, comment)
+
+    send_mail('来自 (%s) 的blog评论' % nickname, '', settings.EMAIL_FROM, [settings.EMAIL_MYSELF], html_message=msg)
+
+
     return redirect('/blog/%s/' % blog_id)
 
 def comments(request):

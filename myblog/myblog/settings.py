@@ -135,3 +135,20 @@ STATIC_ROOT = '/var/www/myblog/static'
 # upload folder
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/var/www/myblog/media'
+
+
+# 邮件设置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# 邮箱服务器
+EMAIL_HOST = 'smtp.163.com'
+# 端口
+EMAIL_PORT = 25
+# 邮箱-用来发送邮件
+EMAIL_HOST_USER = 'sendcomment@163.com'
+# 授权码
+EMAIL_HOST_PASSWORD = '1qaz2wsx3edc'
+# 收件人显示的发件人
+EMAIL_FROM = 'fanlw<sendcomment@163.com>'
+# 自己邮箱，查收评论
+EMAIL_MYSELF = '450726939@qq.com'
+
