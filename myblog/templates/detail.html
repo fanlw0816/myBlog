@@ -6,11 +6,11 @@
     <script type="text/javascript">
         SyntaxHighlighter.all();
         $(function () {
-            var error_name = false;
-            var error_captcha = false;
-            var error_comment = false;
+            var error_name = true;
+            var error_captcha = true;
+            var error_comment = true;
             $('#nickname').blur(function () {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $(this).next().html("用户名不能为空");
                     error_name = true;
                 } else {
@@ -19,7 +19,7 @@
                 }
             });
             $('#comment').blur(function () {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $(this).next().html("留言内容不能为空");
                     error_comment = true;
                 } else {
@@ -28,31 +28,37 @@
                 }
             });
             $('#captcha').blur(function () {
-                if($(this).val() == ''){
-                    $('.change').next().html("验证码不能为空").show();
+                var sCaptcha = $(this).val();
+                if (sCaptcha == '') {
+                    $('.change').next().html("验证码不能为空");
                     error_captcha = true;
                 } else {
-                    error_captcha = false;
-                    $('.change').next().html("").show();
+                    $.get('/verify_code/', {'captcha': sCaptcha}, function (data) {
+                        if (data.sucess == 1) {
+                            error_captcha = false;
+{#                            $('.change').next().next().html("验证码正确")#}
+                        } else {
+                            error_captcha = true;
+                            $('.change').next().html("验证码错误")
+                        }
+                    });
                 }
             });
-
             $('.smart-green').submit(function () {
-               if (error_captcha && error_user && error_comment){
-                   return false;
-               } else {
-                   return true;
-               }
-
+                $('#captcha').blur();
+                $('#comment').blur();
+                $('#nickname').blur();
+                if (error_captcha || error_name || error_comment) {
+                    $('.change').click();
+                    return false;
+                } else {
+                    $('.change').click();
+                    return true;
+                }
             });
-
             $('.change').click(function () {
                 $('#captcha_img').prop({'src': '/captcha/?' + Math.random()})
             });
-            if ({{ error_code|default:0 }} == 2){
-                $('.change').next().html('验证码错误').show();
-            }
-
             $('#nickname').focus(function () {
                 $(this).next().html('');
             });
@@ -61,8 +67,24 @@
             });
             $('#captcha').focus(function () {
                 $('.change').next().html('');
+                $('.change').next().next().html('');
             });
-        })
+        });
+        function fnReply(c_id, r_name) {
+            alert(111);
+            $('#p_id').val(c_id);
+            var iScrollTop = $('#comments-write').offset().top;
+            $("html,body").animate({"scrollTop":iScrollTop});
+            $('#comment').val('@'+r_name+'  ');
+            $('#comment').focus();
+        }
+        function fnComment() {
+            $('#p_id').val('');
+            $('#comment').val('');
+            var iScrollTop = $('#comments-write').offset().top;
+            $("html,body").animate({"scrollTop":iScrollTop});
+            $('#comment').focus();
+        }
     </script>
 {% endblock header %}
 {% block content %}
@@ -132,9 +154,55 @@
                     </div>
                 </article>
                 <div class="comments-eara">
-                    <div class="comments-show"></div>
-                    <div class="comments-write">
-                        <form action="/form/" method="post" class="smart-green">
+                    <div class="comments-show">
+                        <h1>评论 <span>(<a href="javascript:fnComment();">留言</a>)</span></h1>
+                        {% if comment_list|length_is:0 %}
+                            <div class="comment-null">
+                                <p>当前没有评论，请留下您的建议～</p>
+                            </div>
+                        {% else %}
+                            {% for comment in comment_list %}
+                            <div class="row" id="commentid-{{ comment.comment.id }}">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+                                    <img style="width: 100%;" src="/media/{{ comment.comment.head_img }}"
+                                         alt="{{ comment.comment.name }}">
+                                </div>
+                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-10">
+                                    <div class="comment-title">
+                                        <span><a href="{{ comment.comment.link }}">{{ comment.comment.name }}</a></span>
+                                        <span>{{ comment.comment.created }}</span>
+                                        <span><a href="javascript:fnReply({{ comment.comment.id }},'{{ comment.comment.name }}');">回复</a></span>
+                                    </div>
+                                    <div class="comment-one">
+                                        <div>{{ comment.comment.content }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for child in comment.child_list %}
+                                <div class="child">
+                                    <div class="row" id="commentid-{{ child.id }}">
+                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+                                            <img style="width: 100%;" src="/media/{{ child.head_img }}"
+                                                 alt="{{ child.name }}">
+                                        </div>
+                                        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-10">
+                                            <div class="comment-title">
+                                                <span><a href="{{ child.link }}">{{ child.name }}</a></span>
+                                                <span>{{ child.created }}</span>
+                                                <span><a href="javascript:fnReply({{ comment.comment.id }},'{{ child.name }}');">回复</a></span>
+                                            </div>
+                                            <div class="comment-one">
+                                                <div>{{ child.content }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="comments-write" id="comments-write">
+                        <form action="/commit_comment/" method="post" class="smart-green">
                             {% csrf_token %}
                             <h1>评论信息
                                 <span>请留下你的信息.</span>
@@ -153,7 +221,7 @@
 
                             <label>
                                 <span>个人链接(可以为空) :</span>
-                                <input id="address" type="text" value="" name="address" placeholder="请输入联系地址"/>
+                                <input id="link" type="text" value="" name="link" placeholder="请输入联系地址"/>
                                 <div class="error-msg"></div>
                             </label>
 
@@ -163,16 +231,19 @@
                                 <div class="error-msg"></div>
                             </label>
                             <label>
-                                <span>验证码 :</span><br><br></label>
-                                <input id="captcha" type="text" name="captcha" placeholder="验证码"/>
-                                &nbsp;&nbsp;
-                                <img src="/captcha/" alt="验证码" id="captcha_img">
-                                &nbsp;
-                                <span class="change"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>换一张</span>
-                                <div class="error-msg"></div>
-
-
+                                <span>验证码 :</span>
+                                <br><br>
+                            </label>
+                            <input id="captcha" type="text" name="captcha" placeholder="验证码"/>
+                            &nbsp;&nbsp;
+                            <img src="/captcha/" alt="验证码" id="captcha_img">
+                            &nbsp;
+                            <span class="change"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>换一张</span>
+                            <div class="error-msg"></div>
                             <div class="success-msg"></div>
+
+                            <input type="hidden" name="b_id" value="{{ blog.id }}">
+                            <input type="hidden" name="p_id" value="" id="p_id">
                             <input type="submit" class="button" value="提交"/>
                         </form>
                     </div>

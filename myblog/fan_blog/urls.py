@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^blog/(\d+)/', views.details),
+    url(r'^blog/(\d+)/$', views.details),
     url(r'^category/(\d+)/$', views.category),
     url(r'^index/$', views.index),
     url(r'^tags/(\d+)/$', views.tags),
@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^profile/$', views.profile),
     url(r'^visitor_number/$', views.visitor_number),
     url(r'^captcha/$', views.captcha),
+    url(r'^verify_code/$', views.verify_code),
+    url(r'^commit_comment/$', views.commit_comment),
 ]

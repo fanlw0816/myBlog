@@ -7,9 +7,9 @@
     margin-bottom: 60px;
 }
 
-.smart-green h1 {
-    font: 24px "Trebuchet MS", Arial, Helvetica, sans-serif;
-    padding: 20px 0 20px 40px;
+.smart-green h1, .comments-show h1{
+    font: 22px "Trebuchet MS", Arial, Helvetica, sans-serif;
+    padding: 10px 0 10px 20px;
     display: block;
     margin: -30px -30px 10px -30px;
     color: #FFF;
@@ -83,10 +83,57 @@
 .error-msg {
     color: red;
     margin-top: 10px;
+    font-weight: normal;
 }
 
 .success-msg {
     color: #80A24A;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.comments-eara .comments-show{
+    background-color: white;
+    padding: 30px;
+    margin-bottom: 20px;
+    color: black;
+    box-shadow: rgb(50, 50, 50) 5px 5px 20px;
+}
+
+.comments-show .row{
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    word-break: break-all;
+}
+
+.comment-title span{
+    margin-right: 10px;
+}
+
+.child{
+    margin-left: 50px;
+}
+
+.comments-show h1 span{
+    font-size: 16px;
+}
+
+.comments-show h1 span a{
+    font-size: 16px;
+    color: #337ab7;
+    text-decoration: underline !important;
+    text-shadow: none;
+}
+
+.comment-null {
+    /*zoom: 1;*/
+    padding: 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment-null p{
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
 }

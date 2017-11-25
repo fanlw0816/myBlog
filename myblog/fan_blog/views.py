@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, Http404, HttpResponse
 from .models import *
 from django.core.paginator import *
@@ -63,10 +63,21 @@ def details(request, bid):
     else:
         next_blog = blogs[next_index]
 
+    comment_list = Comment.objects.filter(isDelete=False, blog_id=bid, parent_id__isnull=True).order_by('-created')
+
+    c_list = []
+    for comment in comment_list:
+        temp = {}
+        temp['comment'] = comment
+        child_list = comment.comment_set.filter(isDelete=False).order_by('created')
+        temp['child_list'] = child_list
+        c_list.append(temp)
+
     context = {
         'blog': blog,
         'prev_blog': prev_blog,
-        'next_blog': next_blog
+        'next_blog': next_blog,
+        'comment_list': c_list
     }
     response = render(request, 'detail.html', context)
     article_flags = request.COOKIES.get('article_flags', '')
@@ -165,9 +176,11 @@ def profile(request):
 
     return render(request, 'profile.html')
 
+
 def visitor_number(request):
     brose = Browse.objects.all()[0]
     return JsonResponse({'number': brose.number})
+
 
 def captcha(request):
     # 定义变量，用于画面的背景色、宽、高
@@ -212,3 +225,39 @@ def captcha(request):
     im.save(buf, 'png')
     # 将内存中的图片数据返回给客户端，MIME类型为图片png
     return HttpResponse(buf.getvalue(), 'image/png')
+
+
+def verify_code(request):
+    code = request.GET['captcha']
+    if code == request.session['verifycode']:
+        data = 1
+    else:
+        data = 0
+
+    return JsonResponse({'sucess': data})
+
+
+def commit_comment(request):
+    data = request.POST
+    print(data)
+    blog_id = data.get('b_id')
+    parent_id = data.get('p_id')
+    nickname = data.get('nickname')
+    email = data.get('email')
+    link = data.get('link')
+    comment = data['comment']
+    comment_one = Comment()
+    comment_one.blog_id = int(blog_id)
+    comment_one.name = nickname
+    comment_one.link = link
+    comment_one.email = email
+    comment_one.content = comment
+    if parent_id:
+        print(11111)
+        comment_one.parent_id = int(parent_id)
+    comment_one.save()
+    return redirect('/blog/%s/' % blog_id)
+
+def comments(request):
+    pass
+
