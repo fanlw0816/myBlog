@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fan_blog',
     'DjangoUeditor',
+    'django_celery_results',
+    # 'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +154,13 @@ EMAIL_FROM = 'fanlw<sendcomment@163.com>'
 # 自己邮箱，查收评论
 EMAIL_MYSELF = '450726939@qq.com'
 
+
+
+# celery配置
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/2'
+
+#: Only add pickle to this list if your broker is secured
+#: from unwanted access (see userguide/security.html)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_SERIALIZER = 'json'
